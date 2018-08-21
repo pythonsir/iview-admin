@@ -43,40 +43,48 @@ export default [
       }
     ]
   },
-  {
-    path: '',
-    name: 'doc',
-    meta: {
-      title: '文档',
-      href: 'https://lison16.github.io/iview-admin-doc/#/',
-      icon: 'ios-book'
-    }
-  },
-  {
-    path: '/join',
-    name: 'join',
-    component: Main,
-    children: [
-      {
-        path: 'join_page',
-        name: 'join_page',
-        meta: {
-          icon: '_qq',
-          title: 'QQ群'
-        },
-        component: () => import('@/view/join-page.vue')
-      }
-    ]
-  },
+  // {
+  //   path: '',
+  //   name: 'doc',
+  //   meta: {
+  //     title: '文档',
+  //     href: 'https://lison16.github.io/iview-admin-doc/#/',
+  //     icon: 'ios-book'
+  //   }
+  // },
+  // {
+  //   path: '/join',
+  //   name: 'join',
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'join_page',
+  //       name: 'join_page',
+  //       meta: {
+  //         icon: '_qq',
+  //         title: 'QQ群'
+  //       },
+  //       component: () => import('@/view/join-page.vue')
+  //     }
+  //   ]
+  // },
   {
     path: '/components',
     name: 'components',
     meta: {
-      icon: 'logo-buffer',
-      title: '组件'
+      icon: 'md-pricetag',
+      title: '商品'
     },
     component: Main,
     children: [
+      {
+        path: '/category',
+        name: 'category',
+        meta: {
+          title: '商品分类'
+        },
+        component: ()=> import('@/view/components/product/category.vue')
+      },
       {
         path: 'count_to_page',
         name: 'count_to_page',

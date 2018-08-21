@@ -65,10 +65,11 @@ export default {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(res => {
           const data = res.data
-          commit('setAvator', data.avator)
-          commit('setUserName', data.user_name)
-          commit('setUserId', data.user_id)
-          commit('setAccess', data.access)
+          const {userInfo} = data
+          commit('setAvator', userInfo.avatar)
+          commit('setUserName', userInfo.username)
+          commit('setUserId', userInfo.id)
+          commit('setAccess', userInfo.access)
           resolve(data)
         }).catch(err => {
           reject(err)
