@@ -1,4 +1,4 @@
-import { getCategory } from '@/api/category'
+import { getCategory,getTopCategory } from '@/api/category'
 
 export default {
   state: {
@@ -17,6 +17,18 @@ export default {
           reject(err)
         })
       })
+    },
+    handelTopCategory(){
+      return new Promise((resolve, reject) => {
+        getTopCategory().then(res => {
+          const data = res.data
+          resolve(data)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+
+
     }
   }
 }

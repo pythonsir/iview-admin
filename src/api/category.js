@@ -10,3 +10,13 @@ export const getCategory = (data) => {
     method: 'post'
   })
 }
+
+export const getTopCategory = () => {
+
+  return axios.request({
+    url: 'category/topCategory',
+    method: 'post'
+  })
+
+
+}

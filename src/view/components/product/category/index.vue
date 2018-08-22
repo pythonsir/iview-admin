@@ -2,8 +2,8 @@
     <div v-if="operate === 'list'">
         <categoryList  @on-change-view="changeOpetate"></categoryList>
     </div>
-    <div v-else-if="operate === 'add'">
-        <categoryAdd></categoryAdd>
+    <div v-else-if="operate === 'add'" >
+        <categoryAdd @on-change-view="changeOpetate"></categoryAdd>
     </div>
 </template>
 <script>
