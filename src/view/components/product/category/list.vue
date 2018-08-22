@@ -16,7 +16,7 @@
       </div>
       <div class="btngroup">
          <Tooltip content="新增" placement="top">
-           <Button type="primary" size="large" icon="md-add"></Button>
+           <Button type="primary" size="large" icon="md-add" @click="gotoAddView"></Button>
          </Tooltip>
          <Tooltip content="删除" placement="top">
            <Button type="error" size="large" icon="ios-trash"></Button>
@@ -29,7 +29,7 @@
            <Button @click='handleSelectAll(false)'>取消</Button>
         </div>
         <div class="page">
-            <Page :total="100" show-sizer show-total/>
+            <Page :total="total" :page-size="pagesize"  @on-change="gotopage" @on-page-size-change="changePagesize"  :current="current" placement="bottom"	 show-sizer show-total/>
         </div>
       </div>
       
@@ -171,8 +171,27 @@ export default {
             pageSize:this.pagesize
           }
           this.handelGetCategory(form).then(res => {
-            this.tabledata = res;
+            this.tabledata = res.data
+            this.current = res.currentPage
+            this.pagesize = res.pageSize
+            this.total = res.count
+            this.name = res.name
+            this.is_show = res.is_show
           })
+        },
+        gotopage(page){
+
+            this.current = page;
+            this.handelGetCategoryList()
+
+        },
+        changePagesize(pagesize){
+            
+            this.pagesize = pagesize
+            this.handelGetCategoryList()
+        },
+        gotoAddView(){
+            this.$emit('on-change-view','add')
         }
     }
 };
