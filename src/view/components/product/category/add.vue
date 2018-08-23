@@ -25,9 +25,7 @@
                         <Form class="cform" ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
                             <FormItem label="上级分类" prop="parentId">
                                 <Select clearable @on-clear="clearSelect" v-model="formValidate.parentId" placeholder="默认为顶级">
-
                                     <Option v-for="item in formValidate.categoryList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-
                                 </Select>
                             </FormItem>
                             <FormItem label="分类名称" prop="name">
@@ -54,13 +52,10 @@
                 <TabPane label="数据" name="name2">
                     <div class="container">
                         <Form class="cform">
-                            <FormItem label="分类图标" prop="name">
-                                <Upload ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" multiple type="drag" action="//jsonplaceholder.typicode.com/posts/" style="display: inline-block;width:58px;">
-                                    <div >
-                                        <Icon type="ios-camera" size="20"></Icon>
-                                    </div>
-                                </Upload>
+                            <FormItem label="分类图标:" prop="name">
+                                <FileUpload />
                             </FormItem>
+                            <Divider />
                         </Form>
                     </div>
                 </TabPane>
@@ -71,9 +66,12 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import defaultimg from "@/assets/images/default.png"
+import FileUpload from "@/components/file-upload"
 export default {
     data() {
         return {
+            defaultImg:defaultimg,
             formValidate: {
                 name: "",
                 keywords: "",
@@ -125,6 +123,9 @@ export default {
                 ]
             }
         };
+    },
+    components:{
+        FileUpload
     },
     created: function() {
         this.handelTopCategory().then(data => {
