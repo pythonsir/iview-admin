@@ -24,18 +24,18 @@
             </a>
 
             <div class="api" slot="content">
-                <Upload ref="upload" :before-upload="handleBeforeUpload" :action="fileUploadAction" :show-upload-list="false" :format="['jpg','jpeg','png']" :headers="headers">
+                <Upload ref="upload"  :on-success="handlesuccess"  :action="fileUploadAction" :show-upload-list="false" :format="['jpg','jpeg','png']" :headers="headers">
                     <Button type="primary" size="large">
                         <Icon custom="fa fa-plus" size="18" />
                     </Button>
                 </Upload>
-                <Button type="error" size="large">
+                <Button type="error" size="large" @click="removefile">
                     <Icon custom="fa fa-trash" size="18" />
                 </Button>
             </div>
         </Poptip>
 
-        <Modal title="View Image" v-model="visible">
+        <Modal title="查看图片" v-model="visible">
             <img :src="viewImgUrl" v-if="visible" style="width: 100%">
         </Modal>
 
@@ -46,6 +46,8 @@ import defaultImg from "@/assets/images/default.png";
 import baseurl from "_conf/url.js";
 import { getToken, canTurnTo } from "@/libs/util";
 export default {
+    props:['value'],
+
     data() {
         return {
             imgsrc: defaultImg,
@@ -63,14 +65,21 @@ export default {
                 this.viewImgUrl = url;
                 this.visible = true;
         },
-        handleBeforeUpload (){
-            
-           
+        handlesuccess(response,file,fileList){
 
+            if(fileList.length > 1){
+                fileList.shift()
+            }
+            this.uploadList =fileList;
+
+             this.$emit('input', this.uploadList[0].response.data.fileUrl) 
+
+        },
+        removefile(){
+            this.$refs.upload.fileList = []
+            this.uploadList =[]
+            this.$emit('input', '') 
         }
-    },
-    mounted() {
-        this.uploadList = this.$refs.upload.fileList;
     }
 };
 </script>

@@ -25,7 +25,7 @@
                         <Form class="cform" ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
                             <FormItem label="上级分类" prop="parentId">
                                 <Select clearable @on-clear="clearSelect" v-model="formValidate.parentId" placeholder="默认为顶级">
-                                    <Option v-for="item in formValidate.categoryList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                                    <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                 </Select>
                             </FormItem>
                             <FormItem label="分类名称" prop="name">
@@ -52,8 +52,20 @@
                 <TabPane label="数据" name="name2">
                     <div class="container">
                         <Form class="cform">
-                            <FormItem label="分类图标:" prop="name">
-                                <FileUpload />
+                            <FormItem label="分类图标:" >
+                                <FileUpload  v-model="formValidate.iconUrl" />
+                            </FormItem>
+                            <Divider />
+                            <FormItem label="分类横幅:" >
+                                <FileUpload  v-model="formValidate.bannerUrl" />
+                            </FormItem>
+                            <Divider />
+                            <FormItem label="分类图片:" >
+                                <FileUpload  v-model="formValidate.imgUrl" />
+                            </FormItem>
+                            <Divider />
+                            <FormItem label="wap图片:" >
+                                <FileUpload  v-model="formValidate.wapBannerUrl" />
                             </FormItem>
                             <Divider />
                         </Form>
@@ -72,6 +84,7 @@ export default {
     data() {
         return {
             defaultImg:defaultimg,
+            categoryList: [],
             formValidate: {
                 name: "",
                 keywords: "",
@@ -79,12 +92,12 @@ export default {
                 frontName: "",
                 frontDesc: "",
                 sortOrder: 0,
-                showIndex: 0,
-                categoryList: []
-            },
-            formValidate1: {
-                bannerUrl: ""
-            },
+                showIndex: 0, 
+                bannerUrl:'',
+                iconUrl:'',
+                imgUrl:'',
+                wapBannerUrl:''
+                },
             ruleValidate: {
                 name: [
                     {
@@ -129,7 +142,7 @@ export default {
     },
     created: function() {
         this.handelTopCategory().then(data => {
-            this.formValidate.categoryList = data;
+            this.categoryList = data;
         });
     },
     methods: {
