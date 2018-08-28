@@ -3,7 +3,7 @@
         <Poptip placement="right">
             <a href="javascript:;" class="imgwarper">
                 <template v-if="uploadList.length == 0">
-                    <img :src="imgsrc">
+                    <img :src="value == '' ? imgsrc : value">
                 </template>
                 <template v-else>
                     <template v-for="item in uploadList">

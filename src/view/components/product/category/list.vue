@@ -25,12 +25,13 @@
                     </Button>
                 </Tooltip>
                 <Tooltip content="删除" placement="top">
-                    <Button type="error" size="large">
+                    <Button v-if="!deleteLoading" type="error" size="large"  @click="deleteData">
                         <Icon custom="fa fa-trash" size="18" />
                     </Button>
+                    <Button  v-else type="error" loading>删除中</Button>
                 </Tooltip>
             </div>
-            <Table stripe border ref="selection" :columns='columns' :data='tabledata'></Table>
+            <Table stripe border ref="selection" @on-selection-change="selectChange" :columns='columns' :data='tabledata'></Table>
             <div class="tools">
                 <div class="choose">
                     <Button @click='handleSelectAll(true)'>全选</Button>
@@ -54,6 +55,8 @@ export default {
             current: 1,
             total: 0,
             pagesize: 10,
+            selectData:[],
+            deleteLoading:false,
             is_show_list: [
                 {
                     label: "启用",
@@ -129,29 +132,9 @@ export default {
                                             marginRight: "5px"
                                         },
                                         on: {
-                                            click: () => {}
-                                        }
-                                    })
-                                ]
-                            ),
-                            h(
-                                "Tooltip",
-                                {
-                                    props: {
-                                        content: "查看",
-                                        placement: "top"
-                                    }
-                                },
-                                [
-                                    h("Button", {
-                                        props: {
-                                            icon: "ios-search"
-                                        },
-                                        style: {
-                                            marginRight: "5px"
-                                        },
-                                        on: {
-                                            click: () => {}
+                                            click: () => {
+                                                this.gotoEditor(params.row.id)
+                                            }
                                         }
                                     })
                                 ]
@@ -167,9 +150,13 @@ export default {
         this.handelGetCategoryList();
     },
     methods: {
-        ...mapActions(["handelGetCategory"]),
+        ...mapActions(["handelGetCategory","handelDeleteData"]),
         handleSelectAll(status) {
+            console.log(this.$refs.selection)
             this.$refs.selection.selectAll(status);
+        },
+        gotoEditor(id) {
+            this.$emit("on-change-view", ["eitor",id]);
         },
         handelGetCategoryList() {
             const form = {
@@ -196,7 +183,37 @@ export default {
             this.handelGetCategoryList();
         },
         gotoAddView() {
-            this.$emit("on-change-view", "add");
+            this.$emit("on-change-view", ["add",""]);
+        },
+        selectChange(selection){
+
+            let array = []
+
+            selection.forEach(element => {
+                array.push(element.id)
+            });
+
+            this.selectData = array;
+        },
+        deleteData(){
+
+                if(this.selectData == 0){
+                     this.$Message.success('请至少选择一项数据删除!');
+                     return;
+                }
+
+            this.deleteLoading = true;
+
+            this.handelDeleteData(this.selectData).then(res => {
+                this.deleteLoading = false;
+                this.handelGetCategoryList();
+                this.$Message.success('操作成功');
+
+            }).catch(err => {
+                this.deleteLoading = false;
+                this.$Message.success('系统异常,操作失败');
+            })
+
         }
     }
 };

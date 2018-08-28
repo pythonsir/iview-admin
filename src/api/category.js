@@ -17,6 +17,44 @@ export const getTopCategory = () => {
     url: 'category/topCategory',
     method: 'post'
   })
+}
+
+export const saveCategory = (data) => {
+  return axios.request({
+    url: 'category/saveCategory',
+    data,
+    method: 'post'
+  })
+
+}
+
+export const deleteData = (data) => {
+
+  return axios.request({
+    url:'category/deleteCategory',
+    data:{"ids":data},
+    method: 'post'
+  })
+
+}
+
+export const getCategoryInfo = (data) => {
+
+  return axios.request({
+    url:'category/info',
+    data:{"id":data},
+    method: 'post'
+  })
+
+}
+
+export const saveEditorCategory = (data) => {
+
+  return axios.request({
+    url:'category/saveEditorCategory',
+    data,
+    method: 'post'
+  })
 
 
 }

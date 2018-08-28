@@ -2,7 +2,7 @@
     <div>
         <Card>
             <div class="title">
-                <h3>商品分类-新增</h3>
+                <h3>商品分类-编辑</h3>
                 <div class="btn">
                     <Tooltip content="保存" placement="bottom">
                         <Button v-if="!submitloading" type="primary" @click="handleSubmit('formValidate')">
@@ -26,8 +26,8 @@
 
                         <Form class="cform" ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
                             <FormItem label="上级分类" prop="parentId">
-                                <Select  v-model="formValidate.parentId" placeholder="默认为顶级">
-                                                                       <Option  :value="0" >无</Option>
+                                <Select   v-model="formValidate.parentId" placeholder="默认为顶级">
+                                    <Option  :value="0" >无</Option>
                                     <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                 </Select>
                             </FormItem>
@@ -51,9 +51,10 @@
                             </FormItem>
                             <FormItem label="是否显示" prop="isShow">
                                 <Select  v-model="formValidate.isShow" placeholder="默认为显示">
-                                    <Option  value="1" >显示</Option>
-                                    <Option  value="0" >隐藏</Option>
-                                </Select>                            </FormItem>
+                                    <Option  :value="1" >显示</Option>
+                                    <Option  :value="0" >禁用</Option>
+                                </Select>                            
+                            </FormItem>
                         </Form>
                     </div>
                 </TabPane>
@@ -88,27 +89,17 @@
 import { mapActions } from "vuex";
 import defaultimg from "@/assets/images/default.png"
 import FileUpload from "@/components/file-upload"
-import Vue from 'vue'
 export default {
+    props:[
+        'id'
+    ],
     data() {
         return {
             defaultImg:defaultimg,
             categoryList: [],
             submitloading:false,
-            formValidate: {
-                name: "",
-                keywords: "",
-                parentId: 0,
-                frontName: "",
-                frontDesc: "",
-                sortOrder: 0,
-                showIndex: 0, 
-                bannerUrl:'',
-                iconUrl:'',
-                imgUrl:'',
-                isShow:"1",
-                wapBannerUrl:''
-                },
+            formValidate:{
+            },
             ruleValidate: {
                 name: [
                     {
@@ -153,11 +144,16 @@ export default {
         this.handelTopCategory().then(data => {
             this.categoryList = data;
         });
+
+        this.handelGetCategoryInfo(this.id).then(data => {
+            this.formValidate = data;
+        })
     },
     methods: {
         ...mapActions([
             "handelTopCategory",
-            "handelSaveCategory"
+            "handelSaveEditorCategory",
+            "handelGetCategoryInfo"
             ]),
         gotoback() {
             this.$emit("on-change-view", ["list",""]);
@@ -171,10 +167,11 @@ export default {
 
                         let that = this;
                    
-                        this.handelSaveCategory(this.formValidate).then(res => {
+                        this.handelSaveEditorCategory(this.formValidate).then(res => {
+
                          this.submitloading = false;
-                          this.$Message.success('保存成功!');
-                          this.gotoback()
+                         this.$Message.success('保存成功!');
+                         this.gotoback()
                            
                         }).catch(err => {
                             this.submitloading = false;

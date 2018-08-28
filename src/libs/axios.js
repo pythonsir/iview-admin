@@ -48,10 +48,8 @@ class httpRequest {
           Cookies.remove(TOKEN_KEY)
           window.location.href = window.location.pathname + '#/login'
           Message.error('未登录，或登录失效，请登录')
-        } else {
-          if (data.errmsg) Message.error(data.errmsg)
-        }
-        return false
+        } 
+        return Promise.reject(data)
       }
       return data
     }, (error) => {
