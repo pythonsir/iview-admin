@@ -2,7 +2,7 @@
     <div>
         <Card>
             <div class="title">
-                <h3>商品分类-新增</h3>
+                <h3>商品-新增</h3>
                 <div class="btn">
                     <Tooltip content="保存" placement="bottom">
                         <Button v-if="!submitloading" type="primary" @click="handleSubmit('formValidate')">
@@ -25,42 +25,42 @@
                     <div class="container">
 
                         <Form class="cform" ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-                            <FormItem label="上级分类"  prop="parentId">
-                                <Select  v-model="formValidate.parentId" placeholder="默认为顶级">
+                            <FormItem label="商品分类" class="ivu-form-item-label-my" prop="parentId">
+                                <Select filterable v-model="formValidate.parentId" placeholder="默认为顶级">
                                                                        <Option  :value="0" >无</Option>
                                     <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                 </Select>
                             </FormItem>
                             <Divider />
-                            <FormItem label="分类名称"  prop="name">
-                                <Input v-model="formValidate.name" placeholder="分类名称"></Input>
+                            <FormItem label="商品名称" prop="name">
+                                <Input v-model="formValidate.name" placeholder="商品名称"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="分类标题"  prop="frontName">
-                                <Input v-model="formValidate.frontName" placeholder="分类标题"></Input>
+                            <FormItem label="商品摘要" prop="name">
+                                <Input v-model="formValidate.name" placeholder="商品名称"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="分类描述"  prop="frontDesc">
-                                <Input v-model="formValidate.frontDesc" placeholder="分类描述"></Input>
+                            <FormItem label="商品数量" prop="name">
+                                <Input v-model="formValidate.name" placeholder="商品数量"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="关键字"  prop="keywords">
-                                <Input v-model="formValidate.keywords" placeholder="关键字"></Input>
+                            <FormItem label="商品单位" prop="name">
+                                <Input v-model="formValidate.name" placeholder="商品单位"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="排序"  prop="sortOrder">
-                                <InputNumber  :min="0" v-model="formValidate.sortOrder" placeholder="排序"></InputNumber>
+                            <FormItem label="商品价格" prop="name">
+                                <Input v-model="formValidate.name" placeholder="商品价格"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="显示顺序"  prop="showIndex">
-                                 <InputNumber  :min="0" v-model="formValidate.showIndex" placeholder="显示顺序"></InputNumber>
-                            </FormItem>
-                            <Divider />
-                            <FormItem label="是否显示"  prop="isShow">
+                            <FormItem label="商品状态" prop="isShow">
                                 <Select  v-model="formValidate.isShow" placeholder="默认为显示">
-                                    <Option  value="1" >显示</Option>
-                                    <Option  value="0" >隐藏</Option>
-                                </Select>                            </FormItem>
+                                    <Option  value="1" >上架</Option>
+                                    <Option  value="0" >下架</Option>
+                                </Select>                            
+                            </FormItem>
+                            
+
+                           
                         </Form>
                     </div>
                 </TabPane>
@@ -96,13 +96,15 @@ import { mapActions } from "vuex";
 import defaultimg from "@/assets/images/default.png"
 import FileUpload from "@/components/file-upload"
 import Vue from 'vue'
+
 export default {
-    data() {
+   
+    data(){
         return {
             defaultImg:defaultimg,
             categoryList: [],
             submitloading:false,
-            formValidate: {
+            formValidate:{
                 name: "",
                 keywords: "",
                 parentId: 0,
@@ -115,58 +117,23 @@ export default {
                 imgUrl:'',
                 isShow:"1",
                 wapBannerUrl:''
-                },
-            ruleValidate: {
-                name: [
-                    {
-                        required: true,
-                        message: "分类名称不能为空",
-                        trigger: "blur"
-                    }
-                ],
-                frontName: [
-                    {
-                        required: true,
-                        message: "分类标题不能为空",
-                        trigger: "blur"
-                    }
-                ],
-                frontDesc: [
-                    {
-                        required: true,
-                        message: "分类描述不能为空",
-                        trigger: "blur"
-                    }
-                ],
-                sortOrder: [
-                    {
-                        required: true,
-                        message: "排序不能为空",
-                    }
-                ],
-                showIndex: [
-                    {
-                        required: true,
-                        message: "显示顺序不能为空",
-                    }
-                ]
-            }
-        };
+            },
+            ruleValidate:{}
+        }
     },
     components:{
         FileUpload
     },
     created: function() {
-        this.handelTopCategory().then(data => {
-            this.categoryList = data;
-        });
+        this.handelGetCategoryList().then(data => {
+            this.categoryList = data
+        })
     },
-    methods: {
-        ...mapActions([
-            "handelTopCategory",
-            "handelSaveCategory"
+    methods:{
+      ...mapActions([
+          "handelGetCategoryList"
             ]),
-        gotoback() {
+      gotoback() {
             this.$emit("on-change-view", ["list",""]);
         },
         handleSubmit(name){
@@ -177,23 +144,15 @@ export default {
                         this.submitloading = true;
 
                         let that = this;
-                   
-                        this.handelSaveCategory(this.formValidate).then(res => {
-                         this.submitloading = false;
-                          this.$Message.success('保存成功!');
-                          this.gotoback()
-                           
-                        }).catch(err => {
-                            this.submitloading = false;
-                            this.$Message.error(err.errmsg);
-                        })
+                
 
                     } 
                 })
 
         }
     }
-};
+    
+}
 </script>
 <style lang="less" scoped>
 .title {
@@ -206,15 +165,16 @@ export default {
         flex: 1;
     }
 }
-
-
 .container {
     padding-top: 15px;
 
+  
+
 }
-</style>
-<style>
-.ivu-form-item-label{
+.ivu-form-item-label-my {
     font-weight: bold;
+}
+.cform {
+    
 }
 </style>

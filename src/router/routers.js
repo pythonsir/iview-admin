@@ -61,6 +61,14 @@ export default [
         component: () => import('@/view/components/product/category/index.vue'),
       },
       {
+        path: 'product',
+        name: 'product',
+        meta: {
+          title: '商品管理',
+        },
+        component: () => import('@/view/components/product/product/index.vue'),
+      },
+      {
         path: 'count_to_page',
         name: 'count_to_page',
         meta: {
