@@ -3,11 +3,11 @@
         <Card>
             <div class="form">
                 <div class="form-item">
-                    <Input v-model="name" placeholder="分类名称" style="width: 200px" />
+                    <Input v-model="name" placeholder="商品名称" style="width: 200px" />
                 </div>
                 <div class="form-item">
-                    <Select v-model="is_show" placeholder="选择状态" style="width:200px">
-                        <Option v-for="item in is_show_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    <Select v-model="is_on_sale" placeholder="商品状态" style="width:200px">
+                        <Option v-for="item in is_sale_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </div>
                 <div>
@@ -31,7 +31,7 @@
                     <Button  v-else type="error" loading>删除中</Button>
                 </Tooltip>
             </div>
-            <Table stripe border ref="selection" @on-selection-change="selectChange" :columns='columns' :data='tabledata'></Table>
+            <Table :loading="loading" stripe border ref="selection" @on-selection-change="selectChange" :columns='columns' :data='tabledata'></Table>
             <div class="tools">
                 <div class="choose">
                     <Button @click='handleSelectAll(true)'>全选</Button>
@@ -50,20 +50,21 @@ import { mapActions } from "vuex";
 export default {
     data() {
         return {
+            loading: false,
             name: "",
-            is_show: 1,
+            is_on_sale: 1,
             current: 1,
             total: 0,
             pagesize: 10,
             selectData:[],
             deleteLoading:false,
-            is_show_list: [
+            is_sale_list: [
                 {
-                    label: "启用",
+                    label: "上架",
                     value: 1
                 },
                 {
-                    label: "禁用",
+                    label: "下架",
                     value: 0
                 }
             ],
@@ -74,40 +75,34 @@ export default {
                     align: "center"
                 },
                 {
+                    title: "商品ID",
+                    key: "goods_sn"
+                },
+                {
                     title: "商品名称",
                     key: "name"
                 },
                 {
-                    title: "分类图标",
-                    key: "icon_url",
-                    render: (h, params) => {
-                        const url =
-                            params.row.icon_url === ""
-                                ? "无"
-                                : params.row.icon_url;
-                        return h("div", [
-                            h("img", {
-                                style: {
-                                    width: "25px"
-                                },
-                                attrs: {
-                                    src: url
-                                }
-                            })
-                        ]);
+                    title: "价格",
+                    key: "retail_price",
+                    render: (h,params) =>{
+                        return h("div",["￥"+params.row.retail_price])
+                    }
+                },
+                {
+                    title: "数量",
+                    key: "goods_number",
+                    render: (h,params) => {
+                        return h("div",[params.row.goods_number+" "+params.row.goods_unit])
                     }
                 },
                 {
                     title: "状态",
-                    key: "is_show",
+                    key: "is_on_sale",
                     render: (h, params) => {
-                        const text = params.row.is_show === 1 ? "启用" : "禁用";
+                        const text = params.row.is_on_sale === 1 ? "上架" : "下架";
                         return h("div", [text]);
                     }
-                },
-                {
-                    title: "排序",
-                    key: "sort_order"
                 },
                 {
                     title: "操作",
@@ -133,7 +128,7 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.gotoEditor(params.row.id)
+                                                this.gotoEditor(params.row.goods_sn)
                                             }
                                         }
                                     })
@@ -150,7 +145,7 @@ export default {
         this.handelGetCategoryList();
     },
     methods: {
-        ...mapActions(["handelGetCategory","handelDeleteData"]),
+        ...mapActions(["handelGetGoodsList","handelDeleteData"]),
         handleSelectAll(status) {
             console.log(this.$refs.selection)
             this.$refs.selection.selectAll(status);
@@ -161,17 +156,19 @@ export default {
         handelGetCategoryList() {
             const form = {
                 name: this.name,
-                is_show: this.is_show,
+                is_on_sale: this.is_on_sale,
                 currentPage: this.current,
                 pageSize: this.pagesize
             };
-            this.handelGetCategory(form).then(res => {
+            this.loading = true;
+            this.handelGetGoodsList(form).then(res => {
+                this.loading = false;
                 this.tabledata = res.data;
                 this.current = res.currentPage;
                 this.pagesize = res.pageSize;
                 this.total = res.count;
                 this.name = res.name;
-                this.is_show = res.is_show;
+                this.is_on_sale = res.is_on_sale;
             });
         },
         gotopage(page) {

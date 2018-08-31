@@ -8,3 +8,10 @@ export const getCategoryList = (data) => {
     })
   }
   
+export const getGoodsList = (data) => {
+  return axios.request({
+    url: "goods/index",
+    data,
+    method: 'post'
+  })
+}

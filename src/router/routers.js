@@ -48,7 +48,7 @@ export default [
     name: 'components',
     meta: {
       icon: 'md-pricetag',
-      title: '商品'
+      title: '商品目录'
     },
     component: Main,
     children: [

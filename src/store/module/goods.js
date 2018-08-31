@@ -1,4 +1,4 @@
-import {getCategoryList} from '@/api/goods'
+import {getCategoryList,getGoodsList} from '@/api/goods'
 
 
 export default {
@@ -16,6 +16,19 @@ export default {
                   reject(err)
                 })
               })
+        },
+        handelGetGoodsList({},data){
+            return new Promise((resolve,reject) => {
+
+                getGoodsList(data).then(res => {
+                    const data = res.data
+                    resolve(data)
+                }).catch(err => {
+                    reject(err)
+                })
+
+            })
+
         }
 
     }
