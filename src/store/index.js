@@ -5,6 +5,7 @@ import user from './module/user'
 import app from './module/app'
 import category from './module/category'
 import goods from './module/goods'
+import attribute from './module/attribute'
 
 Vue.use(Vuex)
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     user,
     app,
     category,
-    goods
+    goods,
+    attribute
   }
 })

@@ -69,59 +69,70 @@ export default [
         component: () => import('@/view/components/product/product/index.vue'),
       },
       {
-        path: 'count_to_page',
-        name: 'count_to_page',
+        path: 'attribute',
+        name: 'attribute',
         meta: {
-          icon: 'md-trending-up',
-          title: '数字渐变'
+          title: '商品属性',
+          showAlways: true,
         },
-        component: () => import('@/view/components/count-to/count-to.vue')
-      },
-      {
-        path: 'tables_page',
-        name: 'tables_page',
-        meta: {
-          icon: 'md-grid',
-          title: '多功能表格'
-        },
-        component: () => import('@/view/components/tables/tables.vue')
-      },
-      {
-        path: 'split_pane_page',
-        name: 'split_pane_page',
-        meta: {
-          icon: 'md-pause',
-          title: '分割窗口'
-        },
-        component: () => import('@/view/components/split-pane/split-pane.vue')
-      },
-      {
-        path: 'markdown_page',
-        name: 'markdown_page',
-        meta: {
-          icon: 'logo-markdown',
-          title: 'Markdown编辑器'
-        },
-        component: () => import('@/view/components/markdown/markdown.vue')
-      },
-      {
-        path: 'editor_page',
-        name: 'editor_page',
-        meta: {
-          icon: 'ios-create',
-          title: '富文本编辑器'
-        },
-        component: () => import('@/view/components/editor/editor.vue')
-      },
-      {
-        path: 'icons_page',
-        name: 'icons_page',
-        meta: {
-          icon: '_bear',
-          title: '自定义图标'
-        },
-        component: () => import('@/view/components/icons/icons.vue')
+        component: parentView,
+        children: [
+          {
+            path: 'group',
+            name: 'group',
+            meta: {
+              title: '属性组'
+            },
+            component: () => import('@/view/components/product/attribute/group/index.vue')
+          }
+        ]
+
       }
+      // {
+      //   path: 'tables_page',
+      //   name: 'tables_page',
+      //   meta: {
+      //     icon: 'md-grid',
+      //     title: '多功能表格'
+      //   },
+      //   component: () => import('@/view/components/tables/tables.vue')
+      // }
+      // {
+      //   path: 'split_pane_page',
+      //   name: 'split_pane_page',
+      //   meta: {
+      //     icon: 'md-pause',
+      //     title: '分割窗口'
+      //   },
+      //   component: () => import('@/view/components/split-pane/split-pane.vue')
+      // },
+      // {
+      //   path: 'markdown_page',
+      //   name: 'markdown_page',
+      //   meta: {
+      //     icon: 'logo-markdown',
+      //     title: 'Markdown编辑器'
+      //   },
+      //   component: () => import('@/view/components/markdown/markdown.vue')
+      // },
+      // {
+      //   path: 'editor_page',
+      //   name: 'editor_page',
+      //   meta: {
+      //     icon: 'ios-create',
+      //     title: '富文本编辑器'
+      //   },
+      //   component: () => import('@/view/components/editor/editor.vue')
+      // },
+      // {
+      //   path: 'icons_page',
+      //   name: 'icons_page',
+      //   meta: {
+      //     icon: '_bear',
+      //     title: '自定义图标'
+      //   },
+      //   component: () => import('@/view/components/icons/icons.vue')
+      // }
     ]
   },
   {
