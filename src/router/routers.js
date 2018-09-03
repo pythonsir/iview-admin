@@ -81,7 +81,7 @@ export default [
             path: 'goodsAttr',
             name: 'goodsAttr',
             meta: {
-              title: '商品属性组'
+              title: '商品属性'
             },
             component: () => import('@/view/components/product/attribute/goodsAttribute/index.vue')
           },

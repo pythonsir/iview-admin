@@ -6,8 +6,7 @@
                     <Input v-model="name" placeholder="属性名称" style="width: 200px" />
                 </div>
                 <div class="form-item">
-                    <Select v-model="attribute_category_id"  style="width:200px">
-                        <Option value="">请选择属性组</Option>
+                    <Select v-model="attribute_category_id"  clearable style="width:200px">
                         <Option v-for="item in attribute_category_list" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                 </div>
@@ -47,7 +46,7 @@
     </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions,mapState } from "vuex";
 export default {
     data() {
         return {
@@ -59,7 +58,6 @@ export default {
             pagesize: 10,
             selectData:[],
             deleteLoading:false,
-            attribute_category_list:[],
             columns: [
                 {
                     type: "selection",
@@ -113,11 +111,11 @@ export default {
     },
     created: function() {
         this.goodsAttrbuteList();
-        this.handelAttributeGroup().then(data => {
-            this.attribute_category_list = data;
-        })
-
+        this.handelAttributeGroup();
     },
+    computed:mapState({
+         attribute_category_list:state => state.goodsAttribute.attribute_category_list
+    }),
     methods: {
         ...mapActions(["handelGoodsAttrbuteList","handelAttributeGroup","handelDeleteData"]),
         handleSelectAll(status) {

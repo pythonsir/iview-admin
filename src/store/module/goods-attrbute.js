@@ -2,10 +2,12 @@ import {goodsAttrbuteLis,gttributeGroup} from '@/api/goods-attribute'
 
 export default {
     state: {
-    
+        attribute_category_list:[]
     },
     mutations: {
-  
+        setAttributeCategoryList(state,list){
+            state.attribute_category_list = list;
+        }
     },
     actions: {
         handelGoodsAttrbuteList({},data){
@@ -21,12 +23,13 @@ export default {
             })
 
         },
-        handelAttributeGroup({},data){
+        handelAttributeGroup({commit}){
             return new Promise((resolve,reject) => {
 
                 gttributeGroup().then(res => {
                     const data = res.data;
-                    resolve(data)
+                    commit('setAttributeCategoryList',data);
+                    resolve()
                 }).catch(err => {
                     reject(err)
                 })

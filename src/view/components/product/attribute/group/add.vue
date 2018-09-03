@@ -125,7 +125,5 @@ export default {
 .ivu-form-item-label-my {
     font-weight: bold;
 }
-.cform {
-    
-}
+
 </style>
