@@ -78,6 +78,14 @@ export default [
         component: parentView,
         children: [
           {
+            path: 'goodsAttr',
+            name: 'goodsAttr',
+            meta: {
+              title: '商品属性组'
+            },
+            component: () => import('@/view/components/product/attribute/goodsAttribute/index.vue')
+          },
+          {
             path: 'group',
             name: 'group',
             meta: {
