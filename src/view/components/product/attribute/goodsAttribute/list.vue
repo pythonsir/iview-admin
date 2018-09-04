@@ -117,7 +117,7 @@ export default {
          attribute_category_list:state => state.goodsAttribute.attribute_category_list
     }),
     methods: {
-        ...mapActions(["handelGoodsAttrbuteList","handelAttributeGroup","handelDeleteData"]),
+        ...mapActions(["handelGoodsAttrbuteList","handelAttributeGroup","handelDeleteAttribute"]),
         handleSelectAll(status) {
             console.log(this.$refs.selection)
             this.$refs.selection.selectAll(status);
@@ -173,9 +173,9 @@ export default {
 
             this.deleteLoading = true;
 
-            this.handelDeleteData(this.selectData).then(res => {
+            this.handelDeleteAttribute(this.selectData).then(res => {
                 this.deleteLoading = false;
-                this.handelGetCategoryList();
+                this.goodsAttrbuteList();
                 this.$Message.success('操作成功');
 
             }).catch(err => {

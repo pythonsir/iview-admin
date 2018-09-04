@@ -72,7 +72,6 @@ export default {
                         required: true,
                         message: "属性组不能为空",
                         trigger: "change",
-                        type:'string'
                     }
                 ]
                 
@@ -84,21 +83,24 @@ export default {
     }),
     methods:{
       ...mapActions([
-          "handelGetCategoryList"
+          "handelSaveAttribute"
             ]),
       gotoback() {
             this.$emit("on-change-view", ["list",""]);
         },
         handleSubmit(name){
-
             this.$refs[name].validate((valid) => {
                     if (valid) {
-
                         this.submitloading = true;
-
                         let that = this;
-                
-
+                        this.handelSaveAttribute(this.formValidate).then(res => {
+                          this.submitloading = false;
+                          this.$Message.success('保存成功!');
+                          this.gotoback()
+                        }).catch(err =>{
+                            this.submitloading = false;
+                            this.$Message.error(err.errmsg);
+                        })               
                     } 
                 })
 
