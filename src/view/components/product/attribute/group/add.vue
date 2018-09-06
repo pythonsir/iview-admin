@@ -30,20 +30,13 @@
                             </FormItem>
                             <Divider />
                              <FormItem label="属性状态" prop="enabled">
-                                <Select  v-model="formValidate.enabled" >
+                                <Select transfer v-model="formValidate.enabled" >
                                     <Option  value="1" >启用</Option>
                                     <Option  value="0" >禁用</Option>
                                 </Select>                            
                             </FormItem>
                            <Divider />
                         
-                        </Form>
-                    </div>
-                </TabPane>
-                <TabPane label="数据" name="name2">
-                    <div class="container">
-                        <Form class="cform">
-                           
                         </Form>
                     </div>
                 </TabPane>
@@ -54,35 +47,35 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import defaultimg from "@/assets/images/default.png"
-import FileUpload from "@/components/file-upload"
 import Vue from 'vue'
 
 export default {
    
     data(){
         return {
-            defaultImg:defaultimg,
             categoryList: [],
             submitloading:false,
             formValidate:{
                 name: "",
-                enabled: 1,
+                enabled: "1",
             },
             ruleValidate:{
-
+                name:[
+                    {
+                        required: true,
+                        message: "属性名称不能为空",
+                        trigger: "blur"
+                    }
+                ]
             }
         }
-    },
-    components:{
-        FileUpload
     },
     created: function() {
        
     },
     methods:{
       ...mapActions([
-          "handelGetCategoryList"
+          "handelSaveAttribute"
             ]),
       gotoback() {
             this.$emit("on-change-view", ["list",""]);
@@ -91,10 +84,17 @@ export default {
 
             this.$refs[name].validate((valid) => {
                     if (valid) {
-
                         this.submitloading = true;
-
                         let that = this;
+                        this.handelSaveAttribute(this.formValidate).then(res => {
+                          this.submitloading = false;
+                          this.$Message.success('保存成功!');
+                          this.gotoback()
+                        }).catch(err => {
+                          this.submitloading = false;
+                          this.$Message.error(err.errmsg);
+                        })
+
                 
 
                     } 
