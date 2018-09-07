@@ -26,8 +26,7 @@
 
                         <Form class="cform" ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
                             <FormItem label="商品分类" class="ivu-form-item-label-my" prop="parentId">
-                                <Select filterable v-model="formValidate.parentId" placeholder="默认为顶级">
-                                                                       <Option  :value="0" >无</Option>
+                                <Select filterable clearable v-model="formValidate.parentId" placeholder="请选择商品分类">
                                     <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                 </Select>
                             </FormItem>
@@ -36,24 +35,24 @@
                                 <Input v-model="formValidate.name" placeholder="商品名称"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="商品摘要" prop="name">
-                                <Input v-model="formValidate.name" placeholder="商品名称"></Input>
+                            <FormItem label="商品摘要" prop="goods_brief">
+                                <Input v-model="formValidate.goods_brief" placeholder="商品摘要"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="商品数量" prop="name">
-                                <Input v-model="formValidate.name" placeholder="商品数量"></Input>
+                            <FormItem label="商品数量" prop="goods_number">
+                                <Input v-model="formValidate.goods_number" placeholder="商品数量"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="商品单位" prop="name">
-                                <Input v-model="formValidate.name" placeholder="商品单位"></Input>
+                            <FormItem label="商品单位" prop="goods_unit">
+                                <Input v-model="formValidate.goods_unit" placeholder="商品单位"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="商品价格" prop="name">
-                                <Input v-model="formValidate.name" placeholder="商品价格"></Input>
+                            <FormItem label="商品价格" prop="retail_price">
+                                <Input v-model="formValidate.retail_price" placeholder="商品价格"></Input>
                             </FormItem>
                             <Divider />
-                            <FormItem label="商品状态" prop="isShow">
-                                <Select  v-model="formValidate.isShow" placeholder="默认为显示">
+                            <FormItem label="商品状态" prop="is_on_sale">
+                                <Select  v-model="formValidate.is_on_sale" placeholder="默认为上架">
                                     <Option  value="1" >上架</Option>
                                     <Option  value="0" >下架</Option>
                                 </Select>                            
@@ -100,25 +99,90 @@ import Vue from 'vue'
 export default {
    
     data(){
+
+        const validateAge = (rule, value, callback) => {
+
+                const reg =/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;  
+
+                if (!value) {
+                    return callback(new Error('商品价格不能为空！'));
+                }
+                
+                value -= 0;
+
+                if(!reg.test(value)){  
+  
+                  return callback(new Error('商品价格必须为合法数字(正数，最多两位小数)！'));
+  
+                }
+
+        };
+        
+        const validateNumber = (rule,value,callback) => {
+            if(!value){
+                return callback(new Error('商品数量不能为空！'));
+            }
+            value -= 0;
+            if( ! Number.isInteger(value)){
+                return callback(new Error('商品数量必须为整数'));
+            }
+
+
+        }
+
         return {
             defaultImg:defaultimg,
             categoryList: [],
             submitloading:false,
             formValidate:{
                 name: "",
-                keywords: "",
-                parentId: 0,
-                frontName: "",
-                frontDesc: "",
-                sortOrder: 0,
-                showIndex: 0, 
-                bannerUrl:'',
-                iconUrl:'',
-                imgUrl:'',
-                isShow:"1",
-                wapBannerUrl:''
+                parentId: "",
+                goods_brief:"",
+                goods_number:1,
+                goods_unit:"",
+                retail_price:0,
+                is_on_sale:"1"
             },
-            ruleValidate:{}
+            ruleValidate:{
+                name:[
+                    {
+                        required: true,
+                        message: "商品名称不能为空",
+                        trigger: "blur"
+                    }
+                ],
+                goods_brief:[
+                    {
+                        required: true,
+                        message: "商品摘要不能为空",
+                        trigger: "blur"
+                    }
+                ],
+                goods_number:[
+                    {
+                     required: true,
+                    validator:validateNumber,
+                     trigger: "blur"
+                    }
+                ],
+                goods_unit:[
+                    {
+                     required: true,
+                     message: "商品单位不能为空",
+                     trigger: "blur"
+                    }
+                ],
+                retail_price:[
+                    {   
+                        required: true,
+                        validator:validateAge,
+                        trigger: "blur"
+                    }
+                ]
+
+
+
+            }
         }
     },
     components:{
